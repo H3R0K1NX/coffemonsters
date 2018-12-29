@@ -28,17 +28,18 @@ public class Stack<T> {
 		return this.first.getValue();
 	}
 
+	@Override
 	public String toString() {
-		String str = "▲" + "\n";
+		String str = "{";
 
 		Node<T> pos = this.first;
 		while (pos != null) {
-			str = "\n" + str + pos.getValue().toString() + "\n";
+			str = str + pos.getValue().toString();
 			if (pos.getNext() != null)
-				str = str + "\n";
+				str = str + ", ";
 			pos = pos.getNext();
 		}
-		str = str + "▼";
+		str = str + "}";
 
 		return str;
 	}

@@ -15,6 +15,7 @@ public class StackService {
 			System.out.println("Enter an value");
 			num = in.nextInt();
 		}
+		System.out.println("Done filling the Stack");
 		return s;
 	}
 
@@ -27,6 +28,7 @@ public class StackService {
 			System.out.println("Enter an value");
 			num = in.next().charAt(0);
 		}
+		System.out.println("Done filling the Stack");
 		return s;
 	}
 
@@ -53,14 +55,26 @@ public class StackService {
 			c.push(backup.pop());
 	}
 
-	public static <T> Stack<T> copyStack(Stack<T> t) {
+	public static <T> Stack<T> reverseStack(Stack<T> t) {
 		Stack<T> c = new Stack<T>();
-		Stack<T> k = new Stack<T>();
 		while (!t.isEmpty())
 			c.push(t.pop());
-		while (!c.isEmpty())
-			k.push(c.pop());
-		return k;
+		return c;
+	}
+
+	public static <T> Stack<T> copyStack(Stack<T> t) {
+		Stack<T> copy = new Stack<T>();
+		Stack<T> other = new Stack<T>();
+		while (!t.isEmpty()) {
+			Object val = t.top();
+			copy.push(t.pop());
+			other.push((T) val);
+		}
+		copy = reverseStack(copy);
+		while (!other.isEmpty())
+			t.push(other.pop());
+
+		return copy;
 	}
 
 	public static boolean targil1(Stack<Integer> s, int num) {
@@ -89,20 +103,21 @@ public class StackService {
 		return count;
 	}
 
-	public static <T> boolean targil3(Stack<T> s1, Stack<T> p1) {
-		Stack<T> ss = new Stack<T>();
-		Stack<T> sa = new Stack<T>();
-		while (!s1.isEmpty() && !p1.isEmpty()) {
-			if (s1.top() == p1.top())
-				return true;
-			ss.push(s1.pop());
-			sa.push(p1.pop());
+	public static <T> boolean targil3(Stack<T> s1, Stack<T> s2) {
+		boolean b = false;
+		Stack<T> s3 = new Stack<T>();
+		Stack<T> s4 = new Stack<T>();
+		while (!s1.isEmpty() && !s2.isEmpty()) {
+			if (s1.top() == s2.top()) {
+				b = true;
+				s3.push(s1.pop());
+				s4.push(s2.pop());
+			}
+			b = false;
+			s3.push(s1.pop());
+			s4.push(s2.pop());
 		}
-		while (!ss.isEmpty())
-			s1.push(ss.pop());
-		while (!sa.isEmpty())
-			p1.push(sa.pop());
-		return false;
+		return b;
 	}
 
 	public static <T> Stack<T> shiftUp(Stack<T> s, int amount) {
@@ -153,8 +168,64 @@ public class StackService {
 			s.push(h.pop());
 	}
 
+	public static Stack<Integer> removeButtomVal(Stack<Integer> s) {
+		Stack<Integer> k = reverseStack(s);
+		// System.out.println("K");
+		// System.out.println(k);
+		// while (!k.isEmpty())
+
+		k.pop();
+		// System.out.println("K - POP");
+		// System.out.println(k);
+		s = reverseStack(k);
+		return s;
+	}
+
+	public static boolean isPalindrom(Stack<Integer> s, int num) {
+		boolean b = false;
+		int len = Integer.toString(num).length();
+		String n = Integer.toString(num);
+		for (int i = 0; i < len; i++) {
+			s.push((int) n.charAt(i));
+		}
+		System.out.println(s);
+		Stack<Integer> c = new Stack<Integer>();
+		Stack<Integer> reversed = copyStack(s);
+		reversed = reverseStack(reversed);
+		System.out.println(reversed);
+		while (!s.isEmpty()) {
+			if (s.top() == reversed.top()) {
+				b = true;
+				c.push(s.pop());
+				s = removeButtomVal(s);
+				reversed.pop();
+				reversed = removeButtomVal(reversed);
+				System.out.println("S" + s);
+				System.out.println("REV" + reversed);
+				if (length(s) == 1 && length(reversed) == 1)
+					break;
+			}
+			while (!c.isEmpty()) {
+				s.push(c.pop());
+			}
+			return false;
+		}
+		while (!c.isEmpty()) {
+			s.push(c.pop());
+		}
+		return b;
+	}
+
 	public static void main(String[] args) {
-		Stack<Integer> c = fillStackInteger();
+		// Stack<Integer> c = fillStackInteger();
+		Stack<Integer> c = new Stack<Integer>();
+		System.out.println("C");
+		System.out.println(c);
+//		Stack<Integer> k = fillStackInteger();
+//		System.out.println("K");
+//		System.out.println(k);
+		System.out.println(isPalindrom(c, 12322));
+		System.out.println(c);
 
 	}
 

@@ -3,7 +3,6 @@ package Stack;
 import java.util.Scanner;
 
 public class StackService {
-
 	public static Scanner in = new Scanner(System.in);
 
 	public static Stack<Integer> fillStackInteger() {
@@ -183,36 +182,45 @@ public class StackService {
 
 	public static boolean isPalindrom(Stack<Integer> s, int num) {
 		boolean b = false;
-		int len = Integer.toString(num).length();
-		String n = Integer.toString(num);
-		for (int i = 0; i < len; i++) {
-			s.push((int) n.charAt(i));
+		// int len = Integer.toString(num).length(); //****OPTION 2****
+		// String n = String.valueOf(num);
+		// for (int i = 0; i < len; i++) {
+		// s.push(Character.digit(n.charAt(i), 10));
+		// }
+		int temp = 0;
+		while (num > 0) {
+			temp = num % 10;
+			s.push(temp);
+			num = num / 10;
 		}
-		System.out.println(s);
-		Stack<Integer> c = new Stack<Integer>();
+		Stack<Integer> backup = copyStack(s);
+		System.out.println("S " + s);
+		// Stack<Integer> c = new Stack<Integer>();
 		Stack<Integer> reversed = copyStack(s);
 		reversed = reverseStack(reversed);
-		System.out.println(reversed);
-		while (!s.isEmpty()) {
+		System.out.println("REVERSED " + reversed);
+		while (!s.isEmpty() && length(s) > 1) {
 			if (s.top() == reversed.top()) {
 				b = true;
-				c.push(s.pop());
+				// c.push(s.pop());
+				s.pop();
 				s = removeButtomVal(s);
 				reversed.pop();
 				reversed = removeButtomVal(reversed);
-				System.out.println("S" + s);
-				System.out.println("REV" + reversed);
-				if (length(s) == 1 && length(reversed) == 1)
-					break;
+//				if (length(s) == 1 && length(reversed) == 1)
+//					break;
+			} else {
+//				while (!c.isEmpty()) {
+//					s.push(c.pop());
+//				}
+				s = backup;
+				return false;
 			}
-			while (!c.isEmpty()) {
-				s.push(c.pop());
-			}
-			return false;
 		}
-		while (!c.isEmpty()) {
-			s.push(c.pop());
-		}
+//		while (!c.isEmpty()) {
+//			s.push(c.pop());
+//		}
+		s = backup;
 		return b;
 	}
 
@@ -221,11 +229,11 @@ public class StackService {
 		Stack<Integer> c = new Stack<Integer>();
 		System.out.println("C");
 		System.out.println(c);
-//		Stack<Integer> k = fillStackInteger();
-//		System.out.println("K");
-//		System.out.println(k);
-		System.out.println(isPalindrom(c, 12322));
-		System.out.println(c);
+		// Stack<Integer> k = fillStackInteger();
+		// System.out.println("K");
+		// System.out.println(k);
+		System.out.println(isPalindrom(c, 7245428));
+		System.out.println("C " + c);
 
 	}
 

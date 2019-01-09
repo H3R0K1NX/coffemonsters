@@ -224,16 +224,53 @@ public class StackService {
 		return b;
 	}
 
+	public static Stack<Integer> beLikeBonus(Stack<Integer> a, Stack<Integer> b) {
+		Stack<Integer> copyA = copyStack(a);
+		Stack<Integer> copyB = copyStack(b);
+		Stack<Integer> RESULT = new Stack<Integer>();
+		Stack<Integer> RevA = reverseStack(a);
+		Stack<Integer> RevB = reverseStack(b);
+		int cal, rem;
+		int remA;
+		if (length(a) > length(b)) {
+
+		}
+		if (length(b) > length(a)) {
+
+		}
+		if (length(b) == length(a)) {
+			while (!RevA.isEmpty()) {
+				// remA = RevA.top();
+				cal = RevA.pop() + RevB.pop();
+				if (cal > 10) {
+					rem = RevA.pop();
+					System.out.println("REM " + rem);
+					RESULT.push(9);
+					System.out.println("ADD " + cal);
+					cal = 9 - rem;
+
+					System.out.println("SUB " + cal);
+				} else if (cal == 10) {
+					rem = RevA.pop();
+					RESULT.push(0);
+					cal = rem + 1;
+				}
+
+				RESULT.push(cal);
+			}
+		}
+
+		RESULT = reverseStack(RESULT);
+		return RESULT;
+	}
+
 	public static void main(String[] args) {
-		// Stack<Integer> c = fillStackInteger();
-		Stack<Integer> c = new Stack<Integer>();
-		System.out.println("C");
-		System.out.println(c);
-		// Stack<Integer> k = fillStackInteger();
-		// System.out.println("K");
-		// System.out.println(k);
-		System.out.println(isPalindrom(c, 7245428));
+		Stack<Integer> c = fillStackInteger();
 		System.out.println("C " + c);
+		Stack<Integer> k = fillStackInteger();
+		System.out.println("K " + k);
+		Stack<Integer> RESULT = beLikeBonus(c, k);
+		System.out.println("RESULT " + RESULT);
 
 	}
 

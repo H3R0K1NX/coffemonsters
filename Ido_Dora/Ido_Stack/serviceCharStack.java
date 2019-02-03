@@ -1,4 +1,4 @@
-package Ido_stack;
+package Ido_Stack;
 
 import java.util.Scanner;
 

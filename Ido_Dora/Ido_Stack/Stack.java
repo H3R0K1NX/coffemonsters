@@ -1,4 +1,4 @@
-package Ido_stack;
+package Ido_Stack;
 
 public class Stack<T> {
 	private Node<T> head;

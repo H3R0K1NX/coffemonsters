@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class ServiceBinNode {
 
 	public static Scanner in = new Scanner(System.in);
+	private static int count;
 
 	public static BinNode<Integer> buildIntegerBinTree() {
 		String question = "";
@@ -75,7 +76,7 @@ public class ServiceBinNode {
 		System.out.println("Enter right of " + value + "(or enter -1 to null)");
 		BinNode<Integer> right = readIntegerTree();
 		return new BinNode<Integer>(left, value, right);
-	}
+	}// End Build BinNode
 
 	// Counts of the times of x in BinNode t (#1)
 	public static int howMany(BinNode<Integer> t, int x) {
@@ -145,19 +146,20 @@ public class ServiceBinNode {
 
 	// Page 176 Question 11:
 
-	public static boolean checkIfNodesChildsIsEven(BinNode<Integer> t) {
+	public static void printEven(BinNode<Integer> t) {
 		if (t != null) {
-			if (t.hasLeft())
-				return checkIfNodesChildsIsEven(t.getLeft());
-			if (t.hasRight())
-				return checkIfNodesChildsIsEven(t.getRight());
-			if (checkIfLeaf(t))
-				if (t.getValue() % 2 == 0)
-					return true;
-				else
-					return false;
+			if (checkIfLeaf(t) && t.getValue() % 2 == 0)
+				System.out.println(t.getValue());
+			else if (t.hasLeft() && t.hasRight() && t.getValue() % 2 == 0 && t.getLeft().getValue() % 2 == 0
+					&& t.getRight().getValue() % 2 == 0)
+				System.err.println(t.getValue());
+			else if (t.hasLeft() && t.getValue() % 2 == 0 && t.getLeft().getValue() % 2 == 0)
+				System.out.println(t.getValue());
+			else if (t.hasRight() && t.getValue() % 2 == 0 && t.getRight().getValue() % 2 == 0)
+				System.out.println(t.getValue());
+			printEven(t.getLeft());
+			printEven(t.getRight());
 		}
-		return false;
 	}
 
 	public static boolean isNodeEven(BinNode<Integer> t) {
@@ -166,26 +168,6 @@ public class ServiceBinNode {
 
 	public static <T> boolean hasChild(BinNode<T> t) {
 		return t.hasLeft() || t.hasRight();
-	}
-
-	public static void QuestionEleven(BinNode<Integer> t) {
-		if (t != null) {
-//			if (t.hasLeft())
-//				if (hasChild(t.getLeft()))
-//					if(isNodeEven(t.getLeft()))
-//					System.out.println(t.getLeft());
-//			if (t.hasRight())
-//				if (hasChild(t.getRight()))
-//					System.out.println(t.getRight());
-			if (t.hasLeft() && t.hasRight())
-				if (isNodeEven(t.getLeft()) && isNodeEven(t.getRight()))
-					if (hasChild(t.getLeft()) && hasChild(t.getRight()))
-						if (!(isNodeEven(t.getLeft().getLeft()) && isNodeEven(t.getRight().getLeft())
-								&& !(isNodeEven(t.getLeft().getRight()) && isNodeEven(t.getRight().getRight()))))
-							System.out.println(t.getRight() + "/n" + t.getLeft());
-
-		}
-		System.out.println("BinNode is empty");
 	}
 
 	// Page 176 Question 12:
@@ -198,49 +180,199 @@ public class ServiceBinNode {
 	}
 
 	public static int QuestionTwelve(BinNode<Integer> t) {
+		int isIt = 0;
 		if (t != null) {
-			if (t.hasLeft() && !t.hasRight())
-				if (conditionTwelve(t.getLeft()))
-					return 1 + QuestionTwelve(t.getLeft());
-			if (t.hasRight() && !t.hasLeft())
-				if (conditionTwelve(t.getRight()))
-					return 1 + QuestionTwelve(t.getRight());
-			if (t.hasLeft() && t.hasRight())
-				if (conditionTwelve(t.getLeft()) && conditionTwelve(t.getRight()))
-					return 1 + QuestionTwelve(t.getLeft()) + QuestionTwelve(t.getRight());
-
+			if (t.getValue() >= 10 && t.getValue() < 100)
+				isIt = 1;
 		}
-		return 0;
+		return QuestionTwelve(t.getLeft()) + QuestionTwelve(t.getRight()) + isIt;
 	}
 
 	// Page 177 Question 17:
 
 	public static int QuestionSevenTeen(BinNode<Integer> t) {
-		if (t != null) {
-			if (t.hasLeft() & t.hasRight())
-				return 1 + QuestionSevenTeen(t.getLeft()) + QuestionSevenTeen(t.getRight());
-		}
-		return 0;
+		int isIt = 0;
+		if (t == null)
+			return 0;
+		if (t.hasLeft() && t.hasRight() && !checkIfLeaf(t.getLeft()) && !checkIfLeaf(t.getRight()))
+			isIt = 1;
+		return QuestionSevenTeen(t.getLeft()) + QuestionSevenTeen(t.getRight()) + isIt;
 	}
 
 	// Page 177 Question 18:
 
-	public static boolean QuestionEightTeen(BinNode<Integer> t1, BinNode<Integer> t2) {
-		if (t1 != null && t2 != null) {
-			if (integerExists(t1, t2.getValue()))
-				if (t2.hasLeft() && t2.hasRight())
-					return QuestionEightTeen(t1, t2.getLeft()) && QuestionEightTeen(t1, t2.getRight());
-			if (t2.hasLeft() && !t2.hasRight())
-				return QuestionEightTeen(t1, t2.getLeft());
-			if (!t2.hasLeft() && t2.hasRight())
-				return QuestionEightTeen(t1, t2.getRight());
-		}
-		return false;
+	public static boolean QuestionEightTeen(BinNode<Integer> t1, BinNode<Integer> t2) { // O(m*n) = O(n^2)
+		// O(n) - Nodes in T1
+		// O(m) - Nodes in T2
+		if (t2 == null)
+			return true;
+		if (!integerExists(t1, t2.getValue()))
+			return false;
+		return QuestionEightTeen(t1, t2.getLeft()) && QuestionEightTeen(t1, t2.getRight());
 	}
+
+	// Page 175 Ex2
+	// 10,5,3, 18, 23, 30, 12, 6 -- PreOrder -- The root is at the begging
+	// 5, 3, 10, 23, 18, 12, 30 , 6 -- In order -- The root is at the middle
+	// 3,5, 23, 12, 6 ,30, 18, 10 -- Post order -- The root is at the end
+
+	// Board exercise:
+	// 13, 11, 9, 4, 6, 8, 5, 5, 3, 7, 10, 12, 2 -- PreOrder -- The root is 13
+	// 4, 6, 9, 11, 13, 3, 7, 5, 5 ,8, 12, 10, 2 -- In order -- The root is 13
+	// 6, 4, 9, 11, 7, 3, 5, 5, 12, 2, 10, 8, 13 -- Post Order -- The root is 13
+
+	// Page 176 Ex13
+
+	public static void QuestionTheerteen(BinNode<Integer> t) {
+		int numL, numR;
+		if (t != null && !checkIfLeaf(t)) {
+			if (!t.hasRight() || !t.hasLeft()) {
+
+				if (t.hasRight())
+					System.out.println(t.getRight().getValue());
+				else
+					System.out.println(t.getLeft().getValue());
+			} else {
+				numR = Math.abs(t.getValue() - t.getRight().getValue());
+				numL = Math.abs(t.getValue() - t.getLeft().getValue());
+				if (numR < numL)
+					System.out.println(t.getRight().getValue());
+				else
+					System.out.println(t.getLeft().getValue());
+			}
+			QuestionTheerteen(t.getLeft());
+			QuestionTheerteen(t.getRight());
+		}
+	}
+
+	// Page 176 Ex14
+
+	public static <T> int getLeafs(BinNode<T> bn) {
+		if (!bn.hasLeft() && !bn.hasRight()) {
+			return 1;
+		}
+		if (!bn.hasLeft()) {
+			return getLeafs(bn.getRight());
+		}
+		if (!bn.hasRight()) {
+			return getLeafs(bn.getLeft());
+		}
+		return getLeafs(bn.getLeft()) + getLeafs(bn.getRight());
+
+	}
+
+	// Page 176 Ex15
+
+	public static int inRange(BinNode<Integer> t, int low, int high) {
+		if (t != null) {
+			if (t.hasLeft())
+				if (t.getLeft().getValue() >= low && t.getLeft().getValue() <= high)
+					return 1 + inRange(t.getLeft(), low, high);
+			if (t.hasRight())
+				if (t.getRight().getValue() >= low && t.getRight().getValue() <= high)
+					return 1 + inRange(t.getRight(), low, high);
+			if (t.hasLeft() && t.hasRight())
+				if (t.getLeft().getValue() >= low && t.getLeft().getValue() <= high && t.getRight().getValue() >= low
+						&& t.getRight().getValue() <= high)
+					return 1 + inRange(t.getLeft(), low, high) + 1 + inRange(t.getRight(), low, high);
+		}
+		return 0;
+	}
+
+	// Page 176 Ex16
+
+	public static int sumBranches(BinNode<Integer> bn) {
+		if (!bn.hasLeft() && !bn.hasRight()) {
+			return 0;
+		}
+		if (!bn.hasLeft()) {
+			return sumBranches(bn.getRight());
+		}
+		if (!bn.hasRight()) {
+			return sumBranches(bn.getLeft());
+		}
+		return bn.getValue() + sumBranches(bn.getLeft()) + sumBranches(bn.getRight());
+	}
+
+	// Calculates The height of a bin tree
+
+	public static <T> int height(BinNode<T> t) {
+		if (t == null)
+			return -1;
+		return 1 + Math.max(height(t.getLeft()), height(t.getRight()));
+	}
+
+	// Page 177 Ex19
+
+	// Page 177 Ex20
+
+	public static <T> int numOfDuplicates(BinNode<T> t, T o) {
+		if (t == null)
+			if (t.hasLeft())
+				if (t.getValue() == o)
+					return numOfDuplicates(t.getLeft(), o) + 1;
+		if (t.hasRight())
+			if (t.getValue() == o)
+				return numOfDuplicates(t.getRight(), o) + 1;
+		if (t.hasLeft() & t.hasRight())
+			if (t.getValue() == o)
+				return numOfDuplicates(t.getLeft(), o) + 1 + numOfDuplicates(t.getRight(), o) + 1;
+
+		return 0;
+	}
+
+	public static boolean QuestionTwenty(BinNode<Integer> bn) {
+		int s = size(bn);
+		while (s > 0) {
+			if (!integerExists(bn, s)) {
+				return false;
+			}
+
+		}
+		return true;
+
+	}
+
+	public static <T> int size(BinNode<T> bn) {
+		if (!bn.hasLeft() && !bn.hasRight()) {
+			return 1;
+		}
+		if (!bn.hasLeft()) {
+			return size(bn.getRight()) + 1;
+		}
+
+		if (!bn.hasRight()) {
+			return size(bn.getLeft()) + 1;
+		}
+		return size(bn.getLeft()) + size(bn.getRight()) + 1;
+	}
+
+	/*
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+	// Fibonacci Algorithem
+
+	public static BinNode<Character> fib(int n) {
+		if (n == 1)
+			return new BinNode<Character>('*');
+		if (n == 2)
+			return new BinNode<Character>(fib(1), '*', null);
+		return new BinNode<Character>(fib(n - 1), '*', fib(n - 2));
+	}
+
+//	public static <T> boolean isSymetric(BinNode<T> t) {
+//		if (t == null || checkIfLeaf(t))
+//			return true;
+//		return Math.abs(height(t.getLeft()) - height(t.getRight()) - height(t.getRight()) <= 1
+//				&& isSymetric(t.getLeft()) && isSymetric(t.getRight()));
+//	}
 
 	// MAIN for testing
 	public static void main(String[] args) {
-		// BinNode<Integer> bin = readIntegerBinNode();
+		BinNode<Integer> bin = readIntegerBinNode();
 		// BinNode<Integer> bon = readIntegerBinNode();
 
 		BinNode<Integer> t1 = new BinNode<Integer>(10);
@@ -248,7 +380,7 @@ public class ServiceBinNode {
 
 		t1.setLeft(new BinNode<Integer>(22));
 		t1.getLeft().setRight(new BinNode<Integer>(54));
-		t1.getLeft().setLeft(new BinNode<Integer>(61));
+		t1.getLeft().setLeft(new BinNode<Integer>(new BinNode<Integer>(5), 2, new BinNode<Integer>(3)));
 		t1.setRight(new BinNode<Integer>(83));
 		t1.getRight().setLeft(new BinNode<Integer>(12));
 		t1.getRight().setRight(new BinNode<Integer>(8));
@@ -266,10 +398,10 @@ public class ServiceBinNode {
 //		BinNode<Integer> p = l.getLeft();
 //		p.setRight(new BinNode<Integer>(5));
 
-		System.out.println(t1 + "\n");
+		System.out.println(bin + "\n");
 		// System.out.println(t2 + "\n");
 		// System.out.println(QuestionEightTeen(t1, t2));
-		QuestionEleven(t1);
+		System.out.println(numOfDuplicates(bin, 2));
 	}
 
 }

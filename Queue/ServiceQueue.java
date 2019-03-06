@@ -6,8 +6,10 @@ public class ServiceQueue {
 	public static Scanner in = new Scanner(System.in);
 
 	public static <T> int length(Queue<T> a) {
+		Queue<T> k = copy(a);
 		int count = 0;
-		while (!a.isEmpty()) {
+		while (!k.isEmpty()) {
+			k.remove();
 			count++;
 		}
 		return count;
@@ -63,18 +65,46 @@ public class ServiceQueue {
 		return New;
 	}
 
+	public static boolean ex3(Queue<Character> q, int n) {
+		int l = length(q);
+		int x = n % l;
+		if (x == 0)
+			return true;
+		for (int i = l - x; i > 0; i--) {
+			q.insert(q.remove());
+		}
+		return false;
+	}
+
+	public static void shiftRight(Queue<Character> q, int n) {
+		Queue<Character> h = copy(q);
+		Queue<Character> help = new Queue<Character>();
+		char x = 0;
+		while (!h.isEmpty())
+			x = h.remove();
+		help.insert(x);
+		while (!q.isEmpty()) {
+			x = q.remove();
+			if (!q.isEmpty())
+				help.insert(x);
+		}
+		while (!help.isEmpty())
+			q.insert(help.remove());
+	}
+
 	public static void main(String[] args) {
-		Queue<Integer> q = new Queue<Integer>();
-		q.insert(1);
-		q.insert(3);
-		q.insert(4);
-
-		Queue<Integer> w = new Queue<Integer>();
-		q.insert(5);
-		q.insert(7);
-		q.insert(2);
-		System.out.println(intersectionOfTwoQueues(q, w));
-
+		Queue<Character> q = new Queue<Character>();
+		q.insert('a');
+		q.insert('s');
+		q.insert('r');
+		q.insert('t');
+		System.out.println("Q=" + q);
+		q.insert('Z');
+		System.out.println("Q=" + q);
+		// System.out.println(length(q));
+		// System.out.println(ex3(q, 1));
+		// shiftRight(q, 1);
+		// System.out.println("Q afterparty=" + q);
 	}
 
 }

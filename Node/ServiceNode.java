@@ -789,16 +789,20 @@ public class ServiceNode {
 
 	// RECURSION
 
-	public static Node<Character> sex(Node<Character> c) {
-		Node<Character> p = c;
-		while (p != null && p.hasNext()) {
-			if (p.getValue() < p.getNext().getValue()) {
-				p.setNext(p.getNext().getNext());
-				// p = p.getNext();
-			} else
-				p = p.getNext();
-		}
-		return c;
+	public static <T> Node<T> copy(Node<T> t) {
+		Node<T> k = t;
+		Node<T> j = null;
+		while (k != null) {
+			if (j == null) {
+				j = new Node<T>(k.getValue());
+				k = k.getNext();
+			}
+			j.setNext(new Node<T>(k.getValue(), j.getNext()));
+			k = k.getNext();
+		} // 1->null
+			// 1->2->null
+			//
+		return j;
 	}
 
 	public static Node<Character> s(Node<Character> c) {
@@ -812,7 +816,7 @@ public class ServiceNode {
 	public static void main(String[] args) {
 		Node<Character> first = createAnyTypeOfNode();
 		System.out.println(first);
-		first = sex(first);
+		first = copy(first);
 		System.out.println(first);
 
 	}
